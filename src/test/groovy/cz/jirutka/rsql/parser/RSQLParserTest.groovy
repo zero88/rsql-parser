@@ -134,6 +134,7 @@ class RSQLParserTest extends Specification {
             "'10\\' 15\\\"'"        | "10' 15\""
             "'w\\\\ \\'Flyn\\n\\''" | "w\\ 'Flynn'"
             "'\\\\(^_^)/'"          | "\\(^_^)/"
+            "'he~y'"                | "he~y"
     }
 
     def 'parse escaped double quoted argument: #input'() {
@@ -145,6 +146,7 @@ class RSQLParserTest extends Specification {
             '"10\\\' 15\\""'        | '10\' 15"'
             '"w\\\\ \\"Flyn\\n\\""' | 'w\\ "Flynn"'
             '"\\\\(^_^)/"'          | '\\(^_^)/'
+            '"he~y"'                | 'he~y'
     }
 
     def 'parse arguments group: #input'() {
@@ -184,6 +186,7 @@ class RSQLParserTest extends Specification {
         where:
             input                                    | expected
             's0==a0;s1==a1;s2==a2'                   | and(eq('s0','a0'), eq('s1','a1'), eq('s2','a2'))
+            's0=~a0;s1~=a1;s2=~a2'                   | and(like('s0','a0'), like('s1','a1'), like('s2','a2'))
             's0==a0,s1=out=(a10,a11),s2==a2'         | or(eq('s0','a0'), out('s1','a10', 'a11'), eq('s2','a2'))
             's0==a0,s1==a1;s2==a2,s3==a3'            | or(eq('s0','a0'), and(eq('s1','a1'), eq('s2','a2')), eq('s3','a3'))
     }
@@ -194,10 +197,16 @@ class RSQLParserTest extends Specification {
         where:
             input                                    | expected
             '(s0==a0,s1==a1);s2==a2'                 | and(or(eq('s0','a0'), eq('s1','a1')), eq('s2','a2'))
+            '(s0=~a0,s1~=a1);s2~a2'                  | and(or(like('s0','a0'), like('s1','a1')), like('s2','a2'))
+            '(s0!~a0,s1!~a1);s2!~a2'                 | and(or(notLike('s0','a0'), notLike('s1','a1')), notLike('s2','a2'))
             '(s0==a0,s1=out=(a10,a11));s2==a2,s3==a3'| or(and(or(eq('s0','a0'), out('s1','a10', 'a11')), eq('s2','a2')), eq('s3','a3'))
             '((s0==a0,s1==a1);s2==a2,s3==a3);s4==a4' | and(or(and(or(eq('s0','a0'), eq('s1','a1')), eq('s2','a2')), eq('s3','a3')), eq('s4','a4'))
             '(s0==a0)'                               | eq('s0', 'a0')
+            '(s0=~a0)'                               | like('s0', 'a0')
+            '(s0!~a0)'                               | notLike('s0', 'a0')
             '((s0==a0));s1==a1'                      | and(eq('s0', 'a0'), eq('s1','a1'))
+            '((s0=~a0));s1~=a1'                      | and(like('s0', 'a0'), like('s1','a1'))
+            '((s0!~a0));s1!~a1'                      | and(notLike('s0', 'a0'), notLike('s1','a1'))
     }
 
     def 'throw exception for unclosed parenthesis: #input'() {
@@ -234,5 +243,7 @@ class RSQLParserTest extends Specification {
     def and(Node... nodes) { new AndNode(nodes as List) }
     def or(Node... nodes) { new OrNode(nodes as List) }
     def eq(sel, arg) { new ComparisonNode(EQUAL, sel, [arg as String]) }
+    def like(sel, arg) { new ComparisonNode(LIKE, sel, [arg as String]) }
+    def notLike(sel, arg) { new ComparisonNode(NOT_LIKE, sel, [arg as String]) }
     def out(sel, ...args) { new ComparisonNode(NOT_IN, sel, args as List) }
 }

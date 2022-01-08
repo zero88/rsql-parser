@@ -32,6 +32,7 @@ import net.jcip.annotations.Immutable;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Set;
 
 /**
@@ -54,7 +55,8 @@ import java.util.Set;
  *
  * comparator     = comp-fiql | comp-alt;
  * comp-fiql      = ( ( "=", { ALPHA } ) | "!" ), "=";
- * comp-alt       = ( ">" | "<" ), [ "=" ];
+ * comp-alt       = ( ">" | "<" | "~" ), [ "=" ];
+ * comp-ext       = ( "=" | "!" ), "~" ;
  *
  * arguments      = ( "(", value, { "," , value }, ")" ) | value;
  * value          = unreserved-str | double-quoted | single-quoted;
@@ -74,7 +76,7 @@ import java.util.Set;
 @Immutable
 public final class RSQLParser {
 
-    private static final Charset ENCODING = Charset.forName("UTF-8");
+    private static final Charset ENCODING = StandardCharsets.UTF_8;
 
     private final NodesFactory nodesFactory;
 

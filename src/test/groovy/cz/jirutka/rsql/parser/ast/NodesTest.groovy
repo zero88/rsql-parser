@@ -36,11 +36,13 @@ class NodesTest extends Specification {
         expect:
             rootNode.toString() == output
         where:
-            input                            | output
-            'genres=in=(sci-fi,action)'      | "genres=in=('sci-fi','action')"
-            'name=="Kill Bill";year=gt=2003' | "(name=='Kill Bill';year=gt='2003')"
-            'a<=1;b!=2;c>3'                  | "(a=le='1';b!='2';c=gt='3')"
-            'a=gt=1,b==2;c!=3,d=lt=4'        | "(a=gt='1',(b=='2';c!='3'),d=lt='4')"
+            input                                             | output
+            'genres=in=(sci-fi,action)'                       | "genres=in=('sci-fi','action')"
+            'name=="Kill Bill";year=gt=2003'                  | "(name=='Kill Bill';year=gt='2003')"
+            'a<=1;b!=2;c>3'                                   | "(a=le='1';b!='2';c=gt='3')"
+            'a=gt=1,b==2;c!=3,d=lt=4'                         | "(a=gt='1',(b=='2';c!='3'),d=lt='4')"
+            'name=~"hey";a~"hey";y~="hey",title!~"xy"'        | "((name~'hey';a~'hey';y~'hey'),title!~'xy')"
+            '(director==\'Nolan\',actor==*Bale);year=ge=2000' | "((director=='Nolan',actor=='*Bale');year=ge='2000')"
     }
 
     def 'nodes should accept visitor'() {

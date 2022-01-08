@@ -33,6 +33,8 @@ public abstract class RSQLOperators {
     public static final ComparisonOperator
             EQUAL = new ComparisonOperator("=="),
             NOT_EQUAL = new ComparisonOperator("!="),
+            LIKE = new ComparisonOperator("~", "=~", "~=", "=lk="),
+            NOT_LIKE = new ComparisonOperator("!~" ,"=nk="),
             GREATER_THAN = new ComparisonOperator("=gt=", ">"),
             GREATER_THAN_OR_EQUAL = new ComparisonOperator("=ge=", ">="),
             LESS_THAN = new ComparisonOperator("=lt=", "<"),
@@ -42,7 +44,7 @@ public abstract class RSQLOperators {
 
 
     public static Set<ComparisonOperator> defaultOperators() {
-        return new HashSet<>(asList(EQUAL, NOT_EQUAL, GREATER_THAN, GREATER_THAN_OR_EQUAL,
+        return new HashSet<>(asList(EQUAL, NOT_EQUAL, LIKE, NOT_LIKE, GREATER_THAN, GREATER_THAN_OR_EQUAL,
                                     LESS_THAN, LESS_THAN_OR_EQUAL, IN, NOT_IN));
     }
 }

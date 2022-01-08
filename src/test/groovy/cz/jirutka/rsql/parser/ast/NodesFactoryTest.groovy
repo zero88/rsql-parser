@@ -31,10 +31,13 @@ import static cz.jirutka.rsql.parser.ast.LogicalOperator.AND
 import static cz.jirutka.rsql.parser.ast.LogicalOperator.OR
 import static cz.jirutka.rsql.parser.ast.RSQLOperators.EQUAL
 import static cz.jirutka.rsql.parser.ast.RSQLOperators.GREATER_THAN
+import static cz.jirutka.rsql.parser.ast.RSQLOperators.LIKE
+import static cz.jirutka.rsql.parser.ast.RSQLOperators.NOT_LIKE
+
 
 class NodesFactoryTest extends Specification {
 
-    def factory = new NodesFactory([EQUAL, GREATER_THAN] as Set)
+    def factory = new NodesFactory([EQUAL, GREATER_THAN, LIKE, NOT_LIKE] as Set)
 
 
     @Unroll
@@ -63,6 +66,10 @@ class NodesFactoryTest extends Specification {
             '=='    | EQUAL
             '=gt='  | GREATER_THAN
             '>'     | GREATER_THAN
+            '~'     | LIKE
+            '=~'    | LIKE
+            '~='    | LIKE
+            '!~'    | NOT_LIKE
     }
 
     def 'throw UnknownOperatorException when given unsupported operator token'() {

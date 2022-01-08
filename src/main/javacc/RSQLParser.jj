@@ -95,7 +95,8 @@ TOKEN : {
   | < LPAREN     : "(" >
   | < RPAREN     : ")" >
   | < COMP_FIQL  : ( ( "=" (<ALPHA>)* ) | "!" ) "=" >
-  | < COMP_ALT   : ( ">" | "<" ) ( "=" )? >
+  | < COMP_ALT   : ( ">" | "<" | "~" ) ( "=" )? >
+  | < COMP_EXT   : ( "=" | "!" )  "~"  >
 }
 
 
@@ -169,7 +170,7 @@ ComparisonNode Comparison():
     final List<String> args;
 }
 {
-    ( sel = Selector() op = Operator() args = Arguments() )
+    sel = Selector() op = Operator() args = Arguments()
     {
         return factory.createComparisonNode(op, sel, args);
     }
@@ -185,7 +186,7 @@ String Selector(): {}
 
 String Operator(): {}
 {
-    ( token = <COMP_FIQL> | token = <COMP_ALT> )
+    ( token = <COMP_FIQL> | token = <COMP_ALT> | token = <COMP_EXT> )
     {
         return token.image;
     }
@@ -196,7 +197,7 @@ List<String> Arguments():
     final Object value;
 }
 {
-    ( <LPAREN> value = CommaSepArguments() <RPAREN> ) { return (List) value; }
+    <LPAREN> value = CommaSepArguments() <RPAREN> { return (List) value; }
     |
     value = Argument() { return Arrays.asList((String) value); }
 }

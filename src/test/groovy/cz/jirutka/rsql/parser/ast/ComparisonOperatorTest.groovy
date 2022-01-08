@@ -31,7 +31,7 @@ class ComparisonOperatorTest extends Specification {
         expect:
             new ComparisonOperator(sym)
         where:
-            sym << ['=foo=', '==', '!=', '<', '>', '<=', '>=']
+            sym << ['=foo=', '==', '~', '=~', '~=', '=lk=', '!=', '!~', '<', '>', '<=', '>=', '=lk=', '=nk=' ]
     }
 
     def 'throw IllegalArgumentException when given invalid symbol'() {
@@ -40,7 +40,7 @@ class ComparisonOperatorTest extends Specification {
         then:
             thrown IllegalArgumentException
         where:
-            sym << [null, '', 'foo', '=123=', '=', '=<', '=>', '=!', 'a=b=c']
+            sym << [null, '', 'foo', '=123=', '=', '=<', '=>', '=!', 'a=b=c', '~!', '!~=', '=~=', '=a~=']
     }
 
     def 'equals when contains same symbols'() {
