@@ -4,23 +4,27 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>cz.jirutka.maven</groupId>
-        <artifactId>groovy-parent</artifactId>
-        <version>1.2.0</version>
-    </parent>
-
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <groovy.version>3.0.9</groovy.version>
+        <sonar.projectKey>zero88_rsql-parser</sonar.projectKey>
+        <sonar.organization>zero-88-github</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <version>0.0.0-SNAPSHOT</version>
+    </properties>
 
     <!--//////////////////// ABOUT ////////////////////-->
-
-    <groupId>cz.jirutka.rsql</groupId>
+    <groupId>io.github.zero88</groupId>
     <artifactId>rsql-parser</artifactId>
-    <version>2.1.1-SNAPSHOT</version>
+    <version>${version}</version>
     <packaging>jar</packaging>
 
     <name>RSQL-parser</name>
     <description>Parser of RSQL / FIQL (query language for RESTful APIs) written in JavaCC.</description>
-    <url>http://github.com/jirutka/rsql-parser</url>
+    <url>https://github.com/zero88/rsql-parser.git</url>
     <inceptionYear>2011</inceptionYear>
 
     <developers>
@@ -30,11 +34,13 @@
             <organization>CTU in Prague</organization>
             <organizationUrl>http://www.cvut.cz</organizationUrl>
         </developer>
+        <developer>
+            <name>zero88</name>
+            <email>sontt246@gmail.com</email>
+        </developer>
     </developers>
 
-
     <!--//////////////////// DISTRIBUTION ////////////////////-->
-
     <licenses>
         <license>
             <name>MIT</name>
@@ -43,63 +49,24 @@
     </licenses>
 
     <scm>
-        <url>http://github.com/jirutka/rsql-parser</url>
-        <connection>scm:git:git@github.com:jirutka/rsql-parser.git</connection>
+        <url>https://github.com/zero88/rsql-parser.git</url>
+        <connection>scm:git:git@github.com:zero88/rsql-parser.git</connection>
     </scm>
-
-    <ciManagement>
-        <system>travis</system>
-        <url>https://travis-ci.org/jirutka/rsql-parser</url>
-    </ciManagement>
 
     <issueManagement>
         <system>github</system>
-        <url>https://github.com/jirutka/rsql-parser/issues</url>
+        <url>https://github.com/zero88/rsql-parser/issues</url>
     </issueManagement>
 
-
-    <!--//////////////////// DEPENDENCIES ////////////////////-->
-
-    <dependencies>
-        <!-- Not needed in runtime -->
-        <dependency>
-            <groupId>net.jcip</groupId>
-            <artifactId>jcip-annotations</artifactId>
-            <version>1.0</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.spockframework</groupId>
-            <artifactId>spock-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib-nodep</artifactId>
-            <version>3.1</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- Not used, just to exclude dependency from the parent POM. -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
-
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/zero88/rsql-parser</url>
+        </repository>
+    </distributionManagement>
 
     <!--//////////////////// BUILD ////////////////////-->
-
     <build>
         <plugins>
             <!-- Process JavaCC grammar file and generate parser -->
@@ -116,25 +83,126 @@
                     </execution>
                 </executions>
             </plugin>
-        </plugins>
 
-        <pluginManagement>
-            <plugins>
-                <!-- Generated sources must be excluded from analysis,
-                     otherwise Coveralls fails. -->
-                <plugin>
-                    <groupId>org.jacoco</groupId>
-                    <artifactId>jacoco-maven-plugin</artifactId>
-                    <configuration>
-                        <excludes>
-                            <exclude>**/Parse*.*</exclude>
-                            <exclude>**/SimpleCharStream.*</exclude>
-                            <exclude>**/Token.*</exclude>
-                            <exclude>**/TokenMgrError.*</exclude>
-                        </excludes>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
+            <!-- Generated sources must be excluded from analysis, otherwise Coveralls fails. -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.7</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/Parse*.*</exclude>
+                        <exclude>**/SimpleCharStream.*</exclude>
+                        <exclude>**/Token.*</exclude>
+                        <exclude>**/TokenMgrError.*</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Mandatory plugins for using Spock -->
+            <plugin>
+                <!-- The gmavenplus plugin is used to compile Groovy code. To learn more about this plugin,
+                visit https://github.com/groovy/GMavenPlus/wiki -->
+                <groupId>org.codehaus.gmavenplus</groupId>
+                <artifactId>gmavenplus-plugin</artifactId>
+                <version>1.12.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>compileTests</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Optional plugins for using Spock -->
+            <!-- Only required if names of spec classes don't match default Surefire patterns (`*Test` etc.) -->
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M5</version>
+                <configuration>
+                    <useModulePath>false</useModulePath> <!-- https://issues.apache.org/jira/browse/SUREFIRE-1809 -->
+                    <useFile>false</useFile>
+                    <includes>
+                        <include>**/*Test</include>
+                        <include>**/*Spec</include>
+                    </includes>
+                    <statelessTestsetReporter
+                        implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5Xml30StatelessReporter">
+                        <disable>false</disable>
+                        <version>3.0</version>
+                        <usePhrasedFileName>false</usePhrasedFileName>
+                        <usePhrasedTestSuiteClassName>true</usePhrasedTestSuiteClassName>
+                        <usePhrasedTestCaseClassName>true</usePhrasedTestCaseClassName>
+                        <usePhrasedTestCaseMethodName>true</usePhrasedTestCaseMethodName>
+                    </statelessTestsetReporter>
+                </configuration>
+            </plugin>
+
+        </plugins>
     </build>
+
+    <!--//////////////////// DEPENDENCIES ////////////////////-->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.spockframework</groupId>
+                <artifactId>spock-bom</artifactId>
+                <version>2.1-M2-groovy-3.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>net.jcip</groupId>
+            <artifactId>jcip-annotations</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Mandatory dependencies for using Spock -->
+        <dependency>
+            <groupId>org.spockframework</groupId>
+            <artifactId>spock-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.spockframework</groupId>
+            <artifactId>spock-junit4</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy</artifactId>
+            <version>${groovy.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+            <version>3.3.0</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
 </project>
