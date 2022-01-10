@@ -144,7 +144,7 @@ jobs:
     needs: [ context, build, analysis ]
     if: needs.context.outputs.isRelease == 'true'
     permissions:
-      contents: read
+      contents: write
       packages: write
     steps:
       - uses: actions/checkout@v2
