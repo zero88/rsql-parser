@@ -1,6 +1,10 @@
 = Changelog
-:repo-uri: https://github.com/jirutka/rsql-parser
+:repo-uri: https://github.com/zero88/rsql-parser
 :issue-uri: {repo-uri}/issues
+
+== 2.2.0 (2022-01-10)
+
+* Added `~`(`~=`, `=~`, `=lk=`) as `Like` operator and `!~`(`=nk=`) as `Not Like` operator.
 
 == 2.1.0 (2014-02-07)
 
