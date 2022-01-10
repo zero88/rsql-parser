@@ -1,19 +1,34 @@
 = RSQL / FIQL parser
-Jakub Jirutka <https://github.com/jirutka[@jirutka]>
-:name: rsql-parser
-:version: 2.1.0
-:mvn-group: cz.jirutka.rsql
-:gh-name: jirutka/{name}
-:gh-branch: master
-:src-base: link:src/main/java/cz/jirutka/rsql/parser
 
-ifdef::env-github[]
-image:https://travis-ci.org/{gh-name}.svg?branch={gh-branch}["Build Status", link="https://travis-ci.org/{gh-name}"]
-image:https://coveralls.io/repos/{gh-name}/badge.svg?branch={gh-branch}&service=github["Coverage Status", link="https://coveralls.io/github/{gh-name}?branch={gh-branch}"]
-image:https://api.codacy.com/project/badge/grade/bd2168ab0e424e028ad6df8ff886d81a["Codacy code quality", link="https://www.codacy.com/app/{gh-name}"]
-image:https://maven-badges.herokuapp.com/maven-central/{mvn-group}/{name}/badge.svg["Maven Central", link="https://maven-badges.herokuapp.com/maven-central/{mvn-group}/{name}"]
-endif::env-github[]
+NOTE: This project is a fork from https://github.com/jirutka/rsql-parser[jirutka/rsql-parser]. The origin project seems abandoned since 2016, so I decide to fork it for easy maintenance. The origin project is awesome and resolves almost everything that I need. However, I would like to support the reserved character `~` to add more intuition for `like` and `not like` operators. Thank @jirutka.
 
+image:https://github.com/zero88/rsql-parser/actions/workflows/build.yml/badge.svg["Build Status", link="https://github.com/zero88/rsql-parser/actions/workflows/build.yml"]
+image:https://img.shields.io/github/v/release/zero88/rsql-parser?include_prereleases[GitHub release (latest SemVer including pre-releases), link="https://github.com/zero88/rsql-parser/releases"]
+image:https://img.shields.io/nexus/r/io.github.zero88/rsql-parser?server=https%3A%2F%2Foss.sonatype.org[Sonatype Nexus (Releases), link="https://search.maven.org/artifact/io.github.zero88/rsql-parser"]
+image:https://img.shields.io/nexus/s/io.github.zero88/rsql-parser?server=https%3A%2F%2Foss.sonatype.org[Sonatype Nexus (Snapshots), link="https://search.maven.org/artifact/io.github.zero88/rsql-parser"]
+image:https://sonarcloud.io/api/project_badges/measure?project=zero88_rsql-parser&metric=coverage["Coverage Status", link="https://sonarcloud.io/summary/overall?id=zero88_rsql-parser"]
+image:https://sonarcloud.io/api/project_badges/measure?project=zero88_rsql-parser&metric=security_rating["Security Status", link="https://sonarcloud.io/summary/overall?id=zero88_rsql-parser"]
+image:https://sonarcloud.io/api/project_badges/measure?project=zero88_rsql-parser&metric=reliability_rating["Reliability Status", link="https://sonarcloud.io/summary/overall?id=zero88_rsql-parser"]
+image:https://sonarcloud.io/api/project_badges/measure?project=zero88_rsql-parser&metric=sqale_rating["Maintainability Status", link="https://sonarcloud.io/summary/overall?id=zero88_rsql-parser"]
+
+Add new artifact to your project:
+
+[source, xml, subs="verbatim, attributes"]
+----
+<dependency>
+    <groupId>io.github.zero88</groupId>
+    <artifactId>rsql-parser</artifactId>
+    <version>2.2.0</version>
+</dependency>
+----
+
+[source, groovy]
+----
+// Gradle groovy
+implementation 'io.github.zero88:rsql-parser:2.2.0'
+----
+
+'''
 RSQL is a query language for parametrized filtering of entries in RESTful APIs.
 It’s based on http://tools.ietf.org/html/draft-nottingham-atompub-fiql-00[FIQL] (Feed Item Query Language) – an URI-friendly syntax for expressing filters across the entries in an Atom Feed.
 FIQL is great for use in URI; there are no unsafe characters, so URL encoding is not required.
@@ -22,7 +37,7 @@ On the other side, FIQL’s syntax is not very intuitive and URL encoding isn’
 For example, you can query your resource like this: `/movies?query=name=="Kill Bill";year=gt=2003` or `/movies?query=director.lastName==Nolan and year>=2000`.
 See <<Examples, examples>> below.
 
-This is a complete and thoroughly tested parser for RSQL written in http://javacc.java.net[JavaCC] and Java.
+This is a complete and thoroughly tested parser for RSQL written in https://javacc.github.io/javacc/[JavaCC] and Java.
 Since RSQL is a superset of the FIQL, it can be used for parsing FIQL as well.
 
 
@@ -33,6 +48,7 @@ RSQL-parser can be used with:
 * https://github.com/tennaito/rsql-jpa[rsql-jpa] to convert RSQL into JPA2 CriteriaQuery,
 * https://github.com/RutledgePaulV/rsql-mongodb[rsql-mongodb] to convert RSQL into MongoDB query using Spring Data MongoDB,
 * https://github.com/RutledgePaulV/q-builders[q-builders] to build (not only) RSQL query in type-safe manner,
+* https://github.com/zero88/rsql[jOOQ RSQL] to convert RSQL into jOOQ query
 * _your own library…_
 
 It’s very easy to write a converter for RSQL using its AST.
@@ -88,9 +104,10 @@ Comparison operators are in FIQL notation and some of them has an alternative sy
 You can also simply extend this parser with your own operators (see the <<How to add custom operators, next section>>).
 
 ----
-comparison-op  = comp-fiql | comp-alt;
+comparison-op  = comp-fiql | comp-alt | comp-ext;
 comp-fiql      = ( ( "=", { ALPHA } ) | "!" ), "=";
-comp-alt       = ( ">" | "<" ), [ "=" ];
+comp-alt       = ( ">" | "<" | "~" ), [ "=" ];
+comp-ext       = ( "=" | "!" ), "~" ;
 ----
 
 Argument can be a single value, or multiple values in parenthesis separated by comma.

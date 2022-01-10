@@ -32,7 +32,7 @@ import static cz.jirutka.rsql.parser.ast.StringUtils.join;
 
 /**
  * This node represents a comparison with operator, selector and arguments,
- * e.g. <tt>name=in=(Jimmy,James)</tt>.
+ * e.g. {@code name=in=(Jimmy,James)}.
  */
 @Immutable
 public final class ComparisonNode extends AbstractNode {
@@ -45,9 +45,9 @@ public final class ComparisonNode extends AbstractNode {
 
 
     /**
-     * @param operator Must not be <tt>null</tt>.
-     * @param selector Must not be <tt>null</tt> or blank.
-     * @param arguments Must not be <tt>null</tt> or empty. If the operator is not
+     * @param operator Must not be {@code null}.
+     * @param selector Must not be {@code null} or blank.
+     * @param arguments Must not be {@code null} or empty. If the operator is not
      *          {@link ComparisonOperator#isMultiValue() multiValue}, then it must contain exactly
      *          one argument.
      *
@@ -77,7 +77,7 @@ public final class ComparisonNode extends AbstractNode {
     /**
      * Returns a copy of this node with the specified operator.
      *
-     * @param newOperator Must not be <tt>null</tt>.
+     * @param newOperator Must not be {@code null}.
      */
     public ComparisonNode withOperator(ComparisonOperator newOperator) {
         return new ComparisonNode(newOperator, selector, arguments);
@@ -90,7 +90,7 @@ public final class ComparisonNode extends AbstractNode {
     /**
      * Returns a copy of this node with the specified selector.
      *
-     * @param newSelector Must not be <tt>null</tt> or blank.
+     * @param newSelector Must not be {@code null} or blank.
      */
     public ComparisonNode withSelector(String newSelector) {
         return new ComparisonNode(operator, newSelector, arguments);
@@ -108,7 +108,7 @@ public final class ComparisonNode extends AbstractNode {
     /**
      * Returns a copy of this node with the specified arguments.
      *
-     * @param newArguments Must not be <tt>null</tt> or empty. If the operator is not
+     * @param newArguments Must not be {@code null} or empty. If the operator is not
      *          {@link ComparisonOperator#isMultiValue() multiValue}, then it must contain exactly
      *          one argument.
      */
