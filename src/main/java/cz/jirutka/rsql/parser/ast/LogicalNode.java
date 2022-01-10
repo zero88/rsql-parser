@@ -42,8 +42,8 @@ public abstract class LogicalNode extends AbstractNode implements Iterable<Node>
 
 
     /**
-     * @param operator Must not be <tt>null</tt>.
-     * @param children Children nodes, i.e. operands; must not be <tt>null</tt>.
+     * @param operator Must not be {@code null}.
+     * @param children Children nodes, i.e. operands; must not be {@code null}.
      */
     protected LogicalNode(LogicalOperator operator, List<? extends Node> children) {
         assert operator != null : "operator must not be null";
