@@ -2,6 +2,10 @@
 :repo-uri: https://github.com/zero88/rsql-parser
 :issue-uri: {repo-uri}/issues
 
+== 2.2.1 (2022-01-14)
+
+* Fix maven pom artifact is wrong version.
+
 == 2.2.0 (2022-01-10)
 
 * Added `~`(`~=`, `=~`, `=lk=`) as `Like` operator and `!~`(`=nk=`) as `Not Like` operator.
