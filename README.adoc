@@ -1,31 +1,38 @@
 = RSQL / FIQL parser
 
+:mvn-group: io.github.zero88
+:name: rsql-parser
+:version: 2.2.1
+:nexus: {mvn-group}/{name}
+:github: zero88/{name}
+:sonar: zero88_rsql-parser
+
 NOTE: This project is a fork from https://github.com/jirutka/rsql-parser[jirutka/rsql-parser]. The origin project seems abandoned since 2016, so I decide to fork it for easy maintenance. The origin project is awesome and resolves almost everything that I need. However, I would like to support the reserved character `~` to add more intuition for `like` and `not like` operators. Thank @jirutka.
 
-image:https://github.com/zero88/rsql-parser/actions/workflows/build.yml/badge.svg["Build Status", link="https://github.com/zero88/rsql-parser/actions/workflows/build.yml"]
-image:https://img.shields.io/github/v/release/zero88/rsql-parser?include_prereleases[GitHub release (latest SemVer including pre-releases), link="https://github.com/zero88/rsql-parser/releases"]
-image:https://img.shields.io/nexus/r/io.github.zero88/rsql-parser?server=https%3A%2F%2Foss.sonatype.org[Sonatype Nexus (Releases), link="https://search.maven.org/artifact/io.github.zero88/rsql-parser"]
-image:https://img.shields.io/nexus/s/io.github.zero88/rsql-parser?server=https%3A%2F%2Foss.sonatype.org[Sonatype Nexus (Snapshots), link="https://search.maven.org/artifact/io.github.zero88/rsql-parser"]
-image:https://sonarcloud.io/api/project_badges/measure?project=zero88_rsql-parser&metric=coverage["Coverage Status", link="https://sonarcloud.io/summary/overall?id=zero88_rsql-parser"]
-image:https://sonarcloud.io/api/project_badges/measure?project=zero88_rsql-parser&metric=security_rating["Security Status", link="https://sonarcloud.io/summary/overall?id=zero88_rsql-parser"]
-image:https://sonarcloud.io/api/project_badges/measure?project=zero88_rsql-parser&metric=reliability_rating["Reliability Status", link="https://sonarcloud.io/summary/overall?id=zero88_rsql-parser"]
-image:https://sonarcloud.io/api/project_badges/measure?project=zero88_rsql-parser&metric=sqale_rating["Maintainability Status", link="https://sonarcloud.io/summary/overall?id=zero88_rsql-parser"]
+image:https://github.com/{github}/actions/workflows/build.yml/badge.svg["Build Status", link="https://github.com/{github}/actions/workflows/build.yml"]
+image:https://img.shields.io/github/v/release/{github}?include_prereleases[GitHub release (latest SemVer including pre-releases), link="https://github.com/{github}/releases"]
+image:https://img.shields.io/nexus/r/{nexus}?server=https%3A%2F%2Foss.sonatype.org[Sonatype Nexus (Releases), link="https://search.maven.org/artifact/{nexus}"]
+image:https://img.shields.io/nexus/s/{nexus}?server=https%3A%2F%2Foss.sonatype.org[Sonatype Nexus (Snapshots), link="https://search.maven.org/artifact/{nexus}"]
+image:https://sonarcloud.io/api/project_badges/measure?project={sonar}&metric=coverage["Coverage Status", link="https://sonarcloud.io/summary/overall?id={sonar}"]
+image:https://sonarcloud.io/api/project_badges/measure?project={sonar}&metric=security_rating["Security Status", link="https://sonarcloud.io/summary/overall?id={sonar}"]
+image:https://sonarcloud.io/api/project_badges/measure?project={sonar}&metric=reliability_rating["Reliability Status", link="https://sonarcloud.io/summary/overall?id={sonar}"]
+image:https://sonarcloud.io/api/project_badges/measure?project={sonar}&metric=sqale_rating["Maintainability Status", link="https://sonarcloud.io/summary/overall?id={sonar}"]
 
 Add new artifact to your project:
 
 [source, xml, subs="verbatim, attributes"]
 ----
 <dependency>
-    <groupId>io.github.zero88</groupId>
-    <artifactId>rsql-parser</artifactId>
-    <version>2.2.0</version>
+    <groupId>{mvn-group}</groupId>
+    <artifactId>{name}</artifactId>
+    <version>{version}</version>
 </dependency>
 ----
 
-[source, groovy]
+[source, groovy, subs="verbatim, attributes"]
 ----
 // Gradle groovy
-implementation 'io.github.zero88:rsql-parser:2.2.0'
+implementation '{mvn-group}:{name}:{version}'
 ----
 
 '''

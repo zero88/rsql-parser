@@ -166,7 +166,7 @@ jobs:
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
 
-      - name: Publish to GitHub Packages Apache Maven
+      - name: Publish to OSSRH release
         run: |
           mvn --batch-mode deploy -Possrh \
             -Dgpg.keyname=${{ steps.import_gpg.outputs.keyid }} -Dgpg.passphrase=${{ secrets.CI_GPG_PASSPHARSE }} -Dgpg.skip=false \
